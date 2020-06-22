@@ -1,18 +1,18 @@
-#exercise
+# exercise
 
 SQL, PLSQL, and R codes for collecting and visualizing my own daily health records, such as:
 
-**Measure**|**Metric**
+**Measure** | **Metric**
 ----------- ----------
-weight|kg
+weight | kg
 ------ --
-waist|cm
+waist | cm
 ----- --
-hip|cm
+hip | cm
 --- --
-WHR|waist/hip
+WHR | waist/hip
 --- ---------
-BMI|weight/(1.69)^2
+BMI | weight/(1.69)^2
 --- ---------------
 
 \*Originally, BMI(Body Mass Index) = weight(kg)/height(m)^2: I simply plugged in my own height in the table above.
