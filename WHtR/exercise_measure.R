@@ -12,29 +12,28 @@ library(ggpubr)
 library(GGally)
 library(lattice)
 library(mice)
-library(cowplot)
 
 #Import Korea Sports Promotion Foundation's Physical Examination Results Data (December 2019)
 #Generate ID for each obeservation
-exercise_measure <- read_delim("C:/Users/Seung Jae Han/Dropbox/±¸Á÷/Data Analyst/Portfolio/exercise_measure_201912.csv", delim = "") %>%
+exercise_measure <- read_delim("/exercise_measure_201912.csv", delim = "") %>%
   mutate(ID = row_number())
 
-#Select only necessary columns of interest (Å°(height),¸ö¹«°Ô(weight),Ã¼Áö¹æÀ²(body fat percentage),Çã¸®µÑ·¹(waist),BMI)
+#Select only necessary columns of interest (í‚¤(height),ëª¸ë¬´ê²Œ(weight),ì²´ì§€ë°©ìœ¨(body fat percentage),í—ˆë¦¬ë‘˜ë ˆ(waist),BMI)
 #Change column names into readable and workable ones
 #Eliminate an outlier (an observation being approximately 1500cm tall)
 #Generate binary variables indicating whether the value is missing or not for both body fat percentage and waist: this is a must for the EDA of missing values later  
 obesity_measure <- exercise_measure %>%
-  select(ID, `ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm`, `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áß : kg`, `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %`, `ÃøÁ¤Ç×¸ñ°ª : BMI : kg/§³`, `ÃøÁ¤Ç×¸ñ°ª : Çã¸®µÑ·¹ : cm`) %>%
-  rename(Å° = `ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm`, ¸ö¹«°Ô = `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áß : kg`, Ã¼Áö¹æÀ² = `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %`, Çã¸®µÑ·¹ = `ÃøÁ¤Ç×¸ñ°ª : Çã¸®µÑ·¹ : cm`, BMI = `ÃøÁ¤Ç×¸ñ°ª : BMI : kg/§³`) %>%
-  filter(Å° <= 300) %>%
-  mutate(Çã¸®µÑ·¹ÃøÁ¤ = as.factor(ifelse(is.na(Çã¸®µÑ·¹) == 0, 1, 0)), Ã¼Áö¹æÀ²ÃøÁ¤ = as.factor(ifelse(is.na(Ã¼Áö¹æÀ²) == 0, 1, 0)))
+  select(ID, `ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm`, `ì¸¡ì •í•­ëª©ê°’ : ì²´ì¤‘ : kg`, `ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %`, `ì¸¡ì •í•­ëª©ê°’ : BMI : kg/ã¡`, `ì¸¡ì •í•­ëª©ê°’ : í—ˆë¦¬ë‘˜ë ˆ : cm`) %>%
+  rename(í‚¤ = `ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm`, ëª¸ë¬´ê²Œ = `ì¸¡ì •í•­ëª©ê°’ : ì²´ì¤‘ : kg`, ì²´ì§€ë°©ìœ¨ = `ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %`, í—ˆë¦¬ë‘˜ë ˆ = `ì¸¡ì •í•­ëª©ê°’ : í—ˆë¦¬ë‘˜ë ˆ : cm`, BMI = `ì¸¡ì •í•­ëª©ê°’ : BMI : kg/ã¡`) %>%
+  filter(í‚¤ <= 300) %>%
+  mutate(í—ˆë¦¬ë‘˜ë ˆì¸¡ì • = as.factor(ifelse(is.na(í—ˆë¦¬ë‘˜ë ˆ) == 0, 1, 0)), ì²´ì§€ë°©ìœ¨ì¸¡ì • = as.factor(ifelse(is.na(ì²´ì§€ë°©ìœ¨) == 0, 1, 0)))
 # ---------------------------------------------------------
 #Explore the pattern of the missing data
 md.pattern(obesity_measure[2:6])
 md.pairs(obesity_measure[2:6])
 
 #Look at how all the variables in the whole data are correlated to each other in a single picture
-correlation_matrix <- ggpairs(obesity_measure[2:6]) + ggtitle("°áÃøÄ¡ ´ëÃ¼ Àü")
+correlation_matrix <- ggpairs(obesity_measure[2:6]) + ggtitle("ê²°ì¸¡ì¹˜ ëŒ€ì²´ ì „")
 correlation_matrix
 
 #See if the distribution of the variable with missing values differs depending on whether the other variable is missing a value or not:
@@ -45,17 +44,17 @@ correlation_matrix
 #MCAR(Missing Completely At Random): the fact that a certain value is missing has nothing to do with its hypothetical value and with the values of other variables
 #MAR(Missing At Random): the propensity for a data point to be missing is not related to the missing data, but it is related to some of the observed data
 
-fat_distribution <- ggplot(obesity_measure,aes(Ã¼Áö¹æÀ²,Çã¸®µÑ·¹ÃøÁ¤,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("Ã¼Áö¹æÀ²(%)") + ggtitle("Ã¼Áö¹æÀ²ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5))
-waist_distribution <- ggplot(obesity_measure,aes(Çã¸®µÑ·¹,Ã¼Áö¹æÀ²ÃøÁ¤,fill = Ã¼Áö¹æÀ²ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("Çã¸®µÑ·¹(cm)") + ggtitle("Çã¸®µÑ·¹ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5))
-BMI_distribution <- ggplot(obesity_measure,aes(BMI,Çã¸®µÑ·¹ÃøÁ¤,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("BMI(¸ö¹«°Ô(kg)/Å°(m)^2)") + ggtitle("BMIÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5))
-height_distribution <- ggplot(obesity_measure,aes(Å°,Çã¸®µÑ·¹ÃøÁ¤,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("Å°(cm)") + ggtitle("Å°ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5))
-weight_distribution <- ggplot(obesity_measure,aes(¸ö¹«°Ô,Çã¸®µÑ·¹ÃøÁ¤,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("¸ö¹«°Ô(kg)") + ggtitle("¸ö¹«°ÔÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5))
+fat_distribution <- ggplot(obesity_measure,aes(ì²´ì§€ë°©ìœ¨,í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("ì²´ì§€ë°©ìœ¨(%)") + ggtitle("ì²´ì§€ë°©ìœ¨ì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5))
+waist_distribution <- ggplot(obesity_measure,aes(í—ˆë¦¬ë‘˜ë ˆ,ì²´ì§€ë°©ìœ¨ì¸¡ì •,fill = ì²´ì§€ë°©ìœ¨ì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("í—ˆë¦¬ë‘˜ë ˆ(cm)") + ggtitle("í—ˆë¦¬ë‘˜ë ˆì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5))
+BMI_distribution <- ggplot(obesity_measure,aes(BMI,í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("BMI(ëª¸ë¬´ê²Œ(kg)/í‚¤(m)^2)") + ggtitle("BMIì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5))
+height_distribution <- ggplot(obesity_measure,aes(í‚¤,í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("í‚¤(cm)") + ggtitle("í‚¤ì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5))
+weight_distribution <- ggplot(obesity_measure,aes(ëª¸ë¬´ê²Œ,í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("ëª¸ë¬´ê²Œ(kg)") + ggtitle("ëª¸ë¬´ê²Œì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5))
 
 missing_values_distribution <- ggarrange(height_distribution, weight_distribution, BMI_distribution, fat_distribution, waist_distribution, ncol = 4, nrow = 2, heights = c(2,2), align = "h")
 missing_values_distribution
 
 missing_values_exploration <- missing_values_distribution %>%
-  annotate_figure(top = text_grob("°áÃøÄ¡ÀÇ ºĞÆ÷", face = "bold", size = 14), bottom = text_grob("Data Source: \n KSPO Physical Examination Results (December 2019)", color = "blue", hjust = 1, x = 1, face = "italic", size = 10))
+  annotate_figure(top = text_grob("ê²°ì¸¡ì¹˜ì˜ ë¶„í¬", face = "bold", size = 14), bottom = text_grob("Data Source: \n KSPO Physical Examination Results (December 2019)", color = "blue", hjust = 1, x = 1, face = "italic", size = 10))
 missing_values_exploration
 # ---------------------------------------------------------
 #Once checking that the missing data are MAR (waist's distribution differs largely between those who have their body fat percentages and those who do not),
@@ -64,8 +63,8 @@ missing_values_exploration
 #m: number of cycles to repeat pmm
 
 fill_in_missing_values <- mice(obesity_measure[2:6], m = 5, method = "pmm", seed = 23456)
-fill_in_missing_values$imp$Ã¼Áö¹æÀ²
-fill_in_missing_values$imp$Çã¸®µÑ·¹
+fill_in_missing_values$imp$ì²´ì§€ë°©ìœ¨
+fill_in_missing_values$imp$í—ˆë¦¬ë‘˜ë ˆ
 
 #Fill in missing values with imputed values determined by the 5th cycle of MICE
 #Compare the distribution of missing values and fully observed values for each variable of interest
@@ -80,29 +79,29 @@ imputed_vs_observed <- stripplot(fill_in_missing_values)
 #since we assumed MAR: the propensity for a data point to be missing is not related to the missing data.
 
 #If they are not similar, it is necessary to figure out why.
-obesity_measure$Ã¼Áö¹æÀ² = imputed$Ã¼Áö¹æÀ² 
-obesity_measure$Çã¸®µÑ·¹ = imputed$Çã¸®µÑ·¹
-aft_imp_waist_comp <- ggplot(obesity_measure,aes(Çã¸®µÑ·¹,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_density(alpha = 0.5) + scale_x_continuous("Çã¸®µÑ·¹(cm)") + ggtitle("Çã¸®µÑ·¹ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5)) 
-aft_imp_fat_comp <- ggplot(obesity_measure,aes(Ã¼Áö¹æÀ²,fill = Ã¼Áö¹æÀ²ÃøÁ¤)) + geom_density(alpha = 0.5) + scale_x_continuous("Ã¼Áö¹æÀ²(%)") + ggtitle("Ã¼Áö¹æÀ²ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5))
+obesity_measure$ì²´ì§€ë°©ìœ¨ = imputed$ì²´ì§€ë°©ìœ¨ 
+obesity_measure$í—ˆë¦¬ë‘˜ë ˆ = imputed$í—ˆë¦¬ë‘˜ë ˆ
+aft_imp_waist_comp <- ggplot(obesity_measure,aes(í—ˆë¦¬ë‘˜ë ˆ,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_density(alpha = 0.5) + scale_x_continuous("í—ˆë¦¬ë‘˜ë ˆ(cm)") + ggtitle("í—ˆë¦¬ë‘˜ë ˆì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5)) 
+aft_imp_fat_comp <- ggplot(obesity_measure,aes(ì²´ì§€ë°©ìœ¨,fill = ì²´ì§€ë°©ìœ¨ì¸¡ì •)) + geom_density(alpha = 0.5) + scale_x_continuous("ì²´ì§€ë°©ìœ¨(%)") + ggtitle("ì²´ì§€ë°©ìœ¨ì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5))
 aft_imp_dist_comp <- ggarrange(aft_imp_fat_comp, aft_imp_waist_comp, nrow = 1, ncol = 2, align = "h")
 aft_imp_ins <- ggarrange(imputed_vs_observed, aft_imp_dist_comp, nrow = 2, ncol = 1)
 after_imputation_inspection <- aft_imp_ins %>%
-  annotate_figure(top = text_grob("ºĞÆ÷: ´ëÃ¼°ª vs. °üÂû°ª", face = "bold", size = 14), bottom = text_grob("Caveat: Under MAR (Missing at Random) model, the density should be the same between the observed values and the imputed values", color = "blue", hjust = 1, x = 1, face = "italic", size = 10))
+  annotate_figure(top = text_grob("ë¶„í¬: ëŒ€ì²´ê°’ vs. ê´€ì°°ê°’", face = "bold", size = 14), bottom = text_grob("Caveat: Under MAR (Missing at Random) model, the density should be the same between the observed values and the imputed values", color = "blue", hjust = 1, x = 1, face = "italic", size = 10))
 after_imputation_inspection
 # ---------------------------------------------------------
 # After imputing values into body fat percentage and waist, generate
 # a new variable found out to better predict metabolic and
 # cardiovascular diseases: WHtR
 obesity_measure_with_WHtR <- obesity_measure %>%
-  mutate(WHtR = Çã¸®µÑ·¹/Å°) %>%
-  select(Å°,¸ö¹«°Ô,Ã¼Áö¹æÀ²,BMI,Çã¸®µÑ·¹,WHtR)
+  mutate(WHtR = í—ˆë¦¬ë‘˜ë ˆ/í‚¤) %>%
+  select(í‚¤,ëª¸ë¬´ê²Œ,ì²´ì§€ë°©ìœ¨,BMI,í—ˆë¦¬ë‘˜ë ˆ,WHtR)
   
 # Look at how all the variables in the whole data are correlated to each other in a single picture:
 # Notice that WHtR's correlation to body fat percentage is the highest among all the variables
-correlation_matrix_with_WHtR <- ggpairs(obesity_measure_with_WHtR) + ggtitle("°áÃøÄ¡ ´ëÃ¼ ÈÄ")
+correlation_matrix_with_WHtR <- ggpairs(obesity_measure_with_WHtR) + ggtitle("ê²°ì¸¡ì¹˜ ëŒ€ì²´ í›„")
 correlation_matrix_with_WHtR
 
 correlation_matrices <- ggarrange(ggmatrix_gtable(correlation_matrix), ggmatrix_gtable(correlation_matrix_with_WHtR), nrow = 1, ncol = 2)
 correlation_analysis <- correlation_matrices %>%
-  annotate_figure(top = text_grob("»ó°üºĞ¼®: °áÃøÄ¡ ´ëÃ¼ Àü vs. °áÃøÄ¡ ´ëÃ¼ ÈÄ", face = "bold", size = 14))
+  annotate_figure(top = text_grob("ìƒê´€ë¶„ì„: ê²°ì¸¡ì¹˜ ëŒ€ì²´ ì „ vs. ê²°ì¸¡ì¹˜ ëŒ€ì²´ í›„", face = "bold", size = 14))
 correlation_analysis
