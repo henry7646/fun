@@ -17,20 +17,20 @@ library(lubridate)
 library(ggplot2)
 library(ggpubr)
 
-exercise <- read_xlsx("C:/Users/Seung Jae Han/Dropbox/Trivia/운동기록.xlsx")
+exercise <- read_xlsx("C:/Users/Seung Jae Han/Dropbox/Trivia/운동기록/운동기록.xlsx")
 str(exercise$DATETIME)
 
 whr <- exercise %>%
   ggplot(aes(as.Date(DATETIME),WHR))+geom_line()+scale_x_date("DATE",date_breaks = "1 day", date_labels = "%y/%m/%d")+scale_y_continuous(limits=c(0.7,1),breaks=seq(0.7,1,0.1),expand=c(0,0))+theme(axis.text.x = element_text(angle = 45))
 whr
 
-bmi <- exercise %>%
-  ggplot(aes(as.Date(DATETIME),BMI))+geom_line()+scale_x_date("DATE",date_breaks = "1 day", date_labels = "%y/%m/%d")+scale_y_continuous(limits=c(25,30),breaks=seq(25,30,1))+theme(axis.text.x = element_text(angle = 45))
-bmi
+whtr <- exercise %>%
+  ggplot(aes(as.Date(DATETIME),WHTR))+geom_line()+scale_x_date("DATE",date_breaks = "1 day", date_labels = "%y/%m/%d")+scale_y_continuous(limits=c(0.4,0.7),breaks=seq(0.4,0.7,0.1),expand=c(0,0))+theme(axis.text.x = element_text(angle = 45))
+whtr
 
-whr_bmi <- ggarrange(whr, bmi, ncol = 1, nrow = 2, heights = c(2,2), align = "v")
-whr_bmi
+whr_whtr <- ggarrange(whr, whtr, ncol = 1, nrow = 2, heights = c(2,2), align = "v")
+whr_whtr
 
-운동기록 <- whr_bmi %>%
+운동기록 <- whr_whtr %>%
   annotate_figure(top = text_grob("운동기록",face = "bold", size = 14))
 운동기록
