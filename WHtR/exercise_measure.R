@@ -105,3 +105,33 @@ correlation_matrices <- ggarrange(ggmatrix_gtable(correlation_matrix), ggmatrix_
 correlation_analysis <- correlation_matrices %>%
   annotate_figure(top = text_grob("상관분석: 결측치 대체 전 vs. 결측치 대체 후", face = "bold", size = 14))
 correlation_analysis
+# --------------------------------------------------------
+# Create an R Shiny Dashboard displaying the distribution
+# of the WHtR. If you type in your waist circumference and
+# height, you get your WHtR and your relative WHtR placement within
+# the whole probability distribution of WHtR.
+
+ui <- fluidPage(
+  titlePanel("How Fat am I?: Comparing My Waist-Height Ratio(WHtR) with Others'"),
+  sidebarLayout(
+    sidebarPanel(
+      numericInput("waist","Waist cirumference(cm):",20,145,.1),
+      numericInput("height","Height(cm):",130,200,.1),
+      ),
+    mainPanel(
+      textOutput("q"),
+      plotOutput("r")
+      )
+  )
+)
+
+server <- function(input,output){
+  output$q <- renderText({
+    paste("Your WHtR is",round(input$waist/input$height,2),".")
+  })
+  output$r <- renderPlot({
+    ggplot(obesity_measure_with_WHtR,aes(WHtR))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = input$waist/input$height, color = "red") + scale_x_continuous("WHtR") + ggtitle("Distribution of WHtR")
+  })
+}
+
+shinyApp(ui = ui,server = server)
