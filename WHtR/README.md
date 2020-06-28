@@ -25,7 +25,6 @@ the **BFP obtained via BIA**, the one actually included in KSPO's data. Meanwhil
 project are:  
   * Filling in the missing values for 체지방율 and 허리둘레 using MICE(multivariate imputation with chained equations)  
   * Conducting exploratory data analysis of various health-related metrics (키, 몸무게, 체지방율, BMI, 허리둘레, WHtR) with numerous data visualizations
-  * Creating an R Shiny dashboard to enable people to know where they are in terms of various measures of obesity (BMI, 허리둘레, WHtR) and predict their BFP (체지방율) without  
-  visiting KSPO's centers or relying on biased, inconsistent formulas online.
+  * Creating an R Shiny dashboard to enable people to know where they are in terms of various measures of obesity (BMI, 허리둘레, WHtR) and predict their BFP (체지방율) without visiting KSPO's centers or relying on biased, inconsistent formulas online.
   
 \* I might update this file in the future with KSPO's Physial Examination Data from previous months.
