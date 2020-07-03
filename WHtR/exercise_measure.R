@@ -250,7 +250,7 @@ correlation_matrix_with_WHtR <- ggpairs(obesity_measure_WHtR_2019,columns = c("ë
 correlation_matrix_with_WHtR
 
 #Here comes the showtime. Apply the LSDV model to predict
-#the BF(body fat percentage). The code below will carry out
+#the BFP(body fat percentage). The code below will carry out
 #the backward stepwise regression while plugging in different
 #obesity variables(BMI,WHtR,WC) to find out which model best predicts
 #the BFP.
@@ -280,7 +280,7 @@ summary(regress_on_WC_3)
 #summary(regress_on_WC_4)
 
 #Eliminate outliers with high leverages and Cook's Distances under regress_on_WHtR_1
-#(ex:one observation had BF of 20.8% and WHtR of 1.18. How can someone who is almost
+#(ex:one observation had BFP of 20.8% and WHtR of 1.18. How can someone who is almost
 #underweight have a waist wider than one's own height?) and repeat the above and below
 #regressions again. Combination of common sense, broom::augment() function on regress_on_WHtR_1
 #(focus on .hat and .cooksd), and correlation_matrix_with_WHtR previously obtained
