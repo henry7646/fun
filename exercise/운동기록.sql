@@ -31,10 +31,10 @@ THEN whr_result := '이미 존재하는 기록입니다';
 SELECT ROUND(waist/hip,2) INTO whr_whr
 FROM wh
 WHERE datetime = whr_datetime;
-SELECT ROUND(waist/169,2) INTO whr_whtr
+SELECT ROUND(waist/169.7,2) INTO whr_whtr
 FROM wh
 WHERE datetime = whr_datetime;
-SELECT ROUND(weight/POWER(1.69,2),2) INTO whr_bmi
+SELECT ROUND(weight/POWER(1.697,2),2) INTO whr_bmi
 FROM wh
 WHERE datetime = whr_datetime;
 
@@ -46,10 +46,10 @@ whr_result := '기록을 갱신했습니다';
 SELECT ROUND(waist/hip,2) INTO whr_whr
 FROM wh
 WHERE datetime = whr_datetime;
-SELECT ROUND(waist/169,2) INTO whr_whtr
+SELECT ROUND(waist/169.7,2) INTO whr_whtr
 FROM wh
 WHERE datetime = whr_datetime;
-SELECT ROUND(weight/POWER(1.69,2),2) INTO whr_bmi
+SELECT ROUND(weight/POWER(1.697,2),2) INTO whr_bmi
 FROM wh
 WHERE datetime = whr_datetime;
 
@@ -69,7 +69,7 @@ variable 조회결과 varchar2;
 variable 허리엉덩이비율 number;
 variable 허리신장비율 number;
 variable 체질량지수 number;
-EXECUTE whr_update(TO_DATE(SYSDATE,'YY/MM/DD'),97.5,103,82.7,:조회결과,:허리엉덩이비율,:허리신장비율,:체질량지수);
+EXECUTE whr_update(TO_DATE(SYSDATE,'YY/MM/DD'),98.5,104.5,81.5,:조회결과,:허리엉덩이비율,:허리신장비율,:체질량지수);
 PRINT 조회결과;
 PRINT 허리엉덩이비율;
 PRINT 허리신장비율;
@@ -84,16 +84,16 @@ DECODE(SIGN(ROUND(waist/hip,2) - LAG(ROUND(waist/hip,2)) OVER (ORDER BY datetime
 1, 'WORSENED') AS whr_improvement,
 ABS(ROUND(waist/hip,2) - LAG(ROUND(waist/hip,2)) OVER (ORDER BY datetime)) AS whr_change,
 weight,
-ROUND(waist/169,2) AS whtr,
-DECODE(SIGN(ROUND(waist/169,2) - LAG(ROUND(waist/169,2)) OVER (ORDER BY datetime)), -1, 'IMPROVED',
+ROUND(waist/169.7,2) AS whtr,
+DECODE(SIGN(ROUND(waist/169.7,2) - LAG(ROUND(waist/169.7,2)) OVER (ORDER BY datetime)), -1, 'IMPROVED',
 0, 'SAME',
 1, 'WORSENED') AS whtr_improvement,
-ABS(ROUND(waist/169,2) - LAG(ROUND(waist/169,2)) OVER (ORDER BY datetime)) AS whtr_change,
-ROUND(weight/POWER(1.69,2),1) AS bmi,
-CASE WHEN ROUND(weight/POWER(1.69,2),2) < 18.5 THEN 'UNDERWEIGHT'
-WHEN ROUND(weight/POWER(1.69,2),2) >= 18.5 AND ROUND(weight/POWER(1.69,2),1) < 25 THEN 'NORMAL'
-WHEN ROUND(weight/POWER(1.69,2),2) >= 25 AND ROUND(weight/POWER(1.69,2),1) < 30 THEN 'OVERWEIGHT'
-WHEN ROUND(weight/POWER(1.69,2),2) >= 30 THEN 'OBESE'
+ABS(ROUND(waist/169.7,2) - LAG(ROUND(waist/169.7,2)) OVER (ORDER BY datetime)) AS whtr_change,
+ROUND(weight/POWER(1.697,2),1) AS bmi,
+CASE WHEN ROUND(weight/POWER(1.697,2),2) < 18.5 THEN 'UNDERWEIGHT'
+WHEN ROUND(weight/POWER(1.697,2),2) >= 18.5 AND ROUND(weight/POWER(1.69,2),1) < 25 THEN 'NORMAL'
+WHEN ROUND(weight/POWER(1.697,2),2) >= 25 AND ROUND(weight/POWER(1.69,2),1) < 30 THEN 'OVERWEIGHT'
+WHEN ROUND(weight/POWER(1.697,2),2) >= 30 THEN 'OBESE'
 ELSE 'NA'
 END AS obesity
 FROM wh;
