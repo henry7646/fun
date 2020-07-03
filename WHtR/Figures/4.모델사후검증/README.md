@@ -1,5 +1,6 @@
 # 모델사후검증
-This folder is for saving plots necessary for checking **if the applied LSDV(least-squares dummy variable) model satisfies major OLS(ordinary least squares) assumptions and has as little outliers as possible.**  
+This folder is for saving plots necessary for checking **if the LSDV(least-squares dummy variable) model regressing body fat percentage(BFP) on waist-to-height ratio(WHtR), gender, and month dummy variables satisfies major OLS(ordinary least squares) assumptions and has as little outliers as possible.**  
+
 * **The major OLS assumptions** are as follows:
   * The residuals and the fitted values should not have a relationship with each other (in other words, they must be independent (at least linearly) from each other. This is because the fitted values themselves are linear transformations of independent variables, and independent variables are uncorrelated with residuals by the construction of the OLS)
   * The residuals, when standardized, must follow the standard normal distribution (mean = 0, sd = 1)
