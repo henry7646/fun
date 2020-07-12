@@ -1,5 +1,4 @@
 getwd()
-setwd("C:/Users/Seung Jae Han/Dropbox/Trivia/¿îµ¿±â·Ï")
 .libPaths()
 rm(list = ls())
 #install.packages("dplyr")
@@ -19,7 +18,7 @@ library(lubridate)
 library(ggplot2)
 library(ggpubr)
 
-exercise <- read_xlsx("C:/Users/Seung Jae Han/Dropbox/Trivia/¿îµ¿±â·Ï/¿îµ¿±â·Ï.xlsx")
+exercise <- read_xlsx("ìš´ë™ê¸°ë¡.xlsx")
 str(exercise$DATETIME)
 
 whr <- exercise %>%
@@ -56,6 +55,6 @@ whtr
 whr_whtr <- ggarrange(whr, whtr, ncol = 1, nrow = 2, heights = c(2,2), align = "v")
 whr_whtr
 
-¿îµ¿±â·Ï <- whr_whtr %>%
-  annotate_figure(top = text_grob("¿îµ¿±â·Ï",face = "bold", size = 14))
-¿îµ¿±â·Ï
+ìš´ë™ê¸°ë¡ <- whr_whtr %>%
+  annotate_figure(top = text_grob("ìš´ë™ê¸°ë¡",face = "bold", size = 14))
+ìš´ë™ê¸°ë¡
