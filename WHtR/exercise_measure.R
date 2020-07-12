@@ -1,6 +1,7 @@
 getwd()
 setwd("C:/R/WHtR")
 #rm(list=ls())
+load("exercise_measure.RData")
 
 library(readr)
 library(readxl)
@@ -26,39 +27,39 @@ library(arsenal)
 for(i in c(201901:201912)){
   assign(paste0("exercise_measure_",i),
          read_delim(paste0("C:/R/WHtR/exercise_measure_",i,".csv"), delim = "") %>%
-           filter(`ì¸¡ì • íšŒì°¨` == 1 & `ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm` >= 100 & `ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm` <= 300) %>%
+           filter(`ÃøÁ¤ È¸Â÷` == 1 & `ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm` >= 100 & `ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm` <= 300) %>%
            mutate(ID = row_number()))
 }
 
-#For some unknown reason, exercise_measure_201908$`ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %`
+#For some unknown reason, exercise_measure_201908$`ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %`
 #has been converted to characters instead of numbers. It is necessary to fix this
-exercise_measure_201908$`ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %` <- as.numeric(exercise_measure_201908$`ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %`)
+exercise_measure_201908$`ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %` <- as.numeric(exercise_measure_201908$`ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %`)
 
 #For each month's exercise measure,
-#1.Select only necessary columns of interest (ì¸¡ì •ë‚˜ì´(age),
-#ë‚˜ì´êµ¬ë¶„(age cohort),ì¸¡ì •íšŒì›ì„±ë³„(gender),ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm(height),
-#ì¸¡ì •í•­ëª©ê°’ : ì²´ì¤‘ : kg(weight),ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %(body fat percentage),
-#ì¸¡ì •í•­ëª©ê°’ : í—ˆë¦¬ë‘˜ë ˆ : cm(waist circumference(WC)),ì¸¡ì •í•­ëª©ê°’ : BMI : kg/ã¡(BMI))
-#2.Change column names into readable and workable ones (ì¸¡ì •ë‚˜ì´->ë‚˜ì´,
-#ë‚˜ì´êµ¬ë¶„->ì—°ë ¹ëŒ€,ì¸¡ì •íšŒì›ì„±ë³„->ì„±ë³„,ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm->í‚¤,
-#ì¸¡ì •í•­ëª©ê°’ : ì²´ì¤‘ : kg->ëª¸ë¬´ê²Œ,ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %->ì²´ì§€ë°©ìœ¨,
-#ì¸¡ì •í•­ëª©ê°’ : í—ˆë¦¬ë‘˜ë ˆ : cm->í—ˆë¦¬ë‘˜ë ˆ,ì¸¡ì •í•­ëª©ê°’ : BMI : kg/ã¡->BMI)
+#1.Select only necessary columns of interest (ÃøÁ¤³ªÀÌ(age),
+#³ªÀÌ±¸ºĞ(age cohort),ÃøÁ¤È¸¿ø¼ºº°(gender),ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm(height),
+#ÃøÁ¤Ç×¸ñ°ª : Ã¼Áß : kg(weight),ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %(body fat percentage),
+#ÃøÁ¤Ç×¸ñ°ª : Çã¸®µÑ·¹ : cm(waist circumference(WC)),ÃøÁ¤Ç×¸ñ°ª : BMI : kg/§³(BMI))
+#2.Change column names into readable and workable ones (ÃøÁ¤³ªÀÌ->³ªÀÌ,
+#³ªÀÌ±¸ºĞ->¿¬·É´ë,ÃøÁ¤È¸¿ø¼ºº°->¼ºº°,ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm->Å°,
+#ÃøÁ¤Ç×¸ñ°ª : Ã¼Áß : kg->¸ö¹«°Ô,ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %->Ã¼Áö¹æÀ²,
+#ÃøÁ¤Ç×¸ñ°ª : Çã¸®µÑ·¹ : cm->Çã¸®µÑ·¹,ÃøÁ¤Ç×¸ñ°ª : BMI : kg/§³->BMI)
 #3.Eliminate observations missing values for body fat percentage(BFP):
 #For each month, the maximum number of observations missing the BFP is 30,
 #and the mode is 0
-#4.Eliminate outliers(WC-outside 30~200,BFP-outside 3~100,BMI-outside 10~80):
-#(1)ê±¸ìŠ¤ë°ì´ ë¯¼ì•„(Korean female idol singer) has a waist circumference of 35.5cm
+#4.Eliminate outliers((WC-outside 30~200,BFP-outside 3~100,BMI-outside 10~80):
+#(1)°É½ºµ¥ÀÌ ¹Î¾Æ(Korean female idol singer) has a waist circumference of 35.5cm
 #(2)At least 3~5% of body fat is necessary for a male to survive (8~10% for females)
 #(3)According to the KCDC, the 13-year-old female's threshold for being underweight is BMI = 15.2.
 #(4)gongik.info: maximum BMI among those who received physical examinations for military conscription in 2019 = 77.4
 #5.Generate a binary variable indicating whether the value is missing for WC: this is a must for the exploratory data analysis(EDA) of missing values later  
 for(i in c(201901:201912)){
   assign(paste0("obesity_measure_",i), get(paste0("exercise_measure_",i)) %>%
-    select(ì¸¡ì •ë‚˜ì´, ë‚˜ì´êµ¬ë¶„, ì¸¡ì •íšŒì›ì„±ë³„, `ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm`, `ì¸¡ì •í•­ëª©ê°’ : ì²´ì¤‘ : kg`, `ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %`, `ì¸¡ì •í•­ëª©ê°’ : BMI : kg/ã¡`, `ì¸¡ì •í•­ëª©ê°’ : í—ˆë¦¬ë‘˜ë ˆ : cm`) %>%
-    rename(ë‚˜ì´ = ì¸¡ì •ë‚˜ì´, ì—°ë ¹ëŒ€ = ë‚˜ì´êµ¬ë¶„, ì„±ë³„ = ì¸¡ì •íšŒì›ì„±ë³„, í‚¤ = `ì¸¡ì •í•­ëª©ê°’ : ì‹ ì¥ : cm`, ëª¸ë¬´ê²Œ = `ì¸¡ì •í•­ëª©ê°’ : ì²´ì¤‘ : kg`, ì²´ì§€ë°©ìœ¨ = `ì¸¡ì •í•­ëª©ê°’ : ì²´ì§€ë°©ìœ¨ : %`, í—ˆë¦¬ë‘˜ë ˆ = `ì¸¡ì •í•­ëª©ê°’ : í—ˆë¦¬ë‘˜ë ˆ : cm`, BMI = `ì¸¡ì •í•­ëª©ê°’ : BMI : kg/ã¡`) %>%
-    filter((ì²´ì§€ë°©ìœ¨ >= 3 & ì²´ì§€ë°©ìœ¨ <= 100) & (is.na(í—ˆë¦¬ë‘˜ë ˆ) == 1 |(í—ˆë¦¬ë‘˜ë ˆ >= 30 & í—ˆë¦¬ë‘˜ë ˆ <= 200))) %>%
+    select(ÃøÁ¤³ªÀÌ, ³ªÀÌ±¸ºĞ, ÃøÁ¤È¸¿ø¼ºº°, `ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm`, `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áß : kg`, `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %`, `ÃøÁ¤Ç×¸ñ°ª : BMI : kg/§³`, `ÃøÁ¤Ç×¸ñ°ª : Çã¸®µÑ·¹ : cm`) %>%
+    rename(³ªÀÌ = ÃøÁ¤³ªÀÌ, ¿¬·É´ë = ³ªÀÌ±¸ºĞ, ¼ºº° = ÃøÁ¤È¸¿ø¼ºº°, Å° = `ÃøÁ¤Ç×¸ñ°ª : ½ÅÀå : cm`, ¸ö¹«°Ô = `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áß : kg`, Ã¼Áö¹æÀ² = `ÃøÁ¤Ç×¸ñ°ª : Ã¼Áö¹æÀ² : %`, Çã¸®µÑ·¹ = `ÃøÁ¤Ç×¸ñ°ª : Çã¸®µÑ·¹ : cm`, BMI = `ÃøÁ¤Ç×¸ñ°ª : BMI : kg/§³`) %>%
+    filter((Ã¼Áö¹æÀ² >= 3 & Ã¼Áö¹æÀ² <= 100) & (is.na(Çã¸®µÑ·¹) == 1 |(Çã¸®µÑ·¹ >= 30 & Çã¸®µÑ·¹ <= 200))) %>%
     filter(BMI >= 10 & BMI <= 80) %>%
-    mutate(í—ˆë¦¬ë‘˜ë ˆì¸¡ì • = as.factor(ifelse(is.na(í—ˆë¦¬ë‘˜ë ˆ) == 0, 1, 0)),ì›” = i)
+    mutate(Çã¸®µÑ·¹ÃøÁ¤ = as.factor(ifelse(is.na(Çã¸®µÑ·¹) == 0, 1, 0)),¿ù = i)
   )
 }
 
@@ -66,7 +67,7 @@ for(i in c(201901:201912)){
 #run this loop, check the outliers, and eliminate them by adding additional
 #conditions to the for loop above and running it again
 for(i in c(201901:201912)){
-  print(paste(i,min(select(get(paste0("obesity_measure_",i)),í—ˆë¦¬ë‘˜ë ˆ), na.rm = T),max(select(get(paste0("obesity_measure_",i)),í—ˆë¦¬ë‘˜ë ˆ), na.rm = T)))
+  print(paste(i,min(select(get(paste0("obesity_measure_",i)),Çã¸®µÑ·¹), na.rm = T),max(select(get(paste0("obesity_measure_",i)),Çã¸®µÑ·¹), na.rm = T)))
 }
 # ---------------------------------------------------------
 #Explore the pattern of the missing data for each month:
@@ -79,15 +80,15 @@ md.pattern(obesity_measure_201912)
 #MCAR(Missing Completely At Random): the fact that a certain variable is missing values has nothing to do with its hypothetical value and with the values of other variables
 #MAR(Missing At Random): the propensity for a data point to be missing is not related to the missing data, but it is related to some of the observed data
 for(i in c(201901:201912)){
-assign(paste0("fat_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(ì²´ì§€ë°©ìœ¨,í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("ì²´ì§€ë°©ìœ¨(%)") + ggtitle("ì²´ì§€ë°©ìœ¨ì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5)))
-assign(paste0("BMI_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(BMI,í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("BMI(ëª¸ë¬´ê²Œ(kg)/í‚¤(m)^2)") + ggtitle("BMIì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5)))
-assign(paste0("age_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(ë‚˜ì´,í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("ë‚˜ì´") + ggtitle("ë‚˜ì´ì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5)))
-print(nrow(filter(get(paste0("obesity_measure_",i)),í—ˆë¦¬ë‘˜ë ˆì¸¡ì • == 1 & ì„±ë³„ == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), í—ˆë¦¬ë‘˜ë ˆì¸¡ì • == 1)))
-print(nrow(filter(get(paste0("obesity_measure_",i)),í—ˆë¦¬ë‘˜ë ˆì¸¡ì • == 0 & ì„±ë³„ == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), í—ˆë¦¬ë‘˜ë ˆì¸¡ì • == 0)))
+assign(paste0("fat_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(Ã¼Áö¹æÀ²,Çã¸®µÑ·¹ÃøÁ¤,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("Ã¼Áö¹æÀ²(%)") + ggtitle("Ã¼Áö¹æÀ²ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5)))
+assign(paste0("BMI_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(BMI,Çã¸®µÑ·¹ÃøÁ¤,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("BMI(¸ö¹«°Ô(kg)/Å°(m)^2)") + ggtitle("BMIÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5)))
+assign(paste0("age_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(³ªÀÌ,Çã¸®µÑ·¹ÃøÁ¤,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("³ªÀÌ") + ggtitle("³ªÀÌÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5)))
+print(nrow(filter(get(paste0("obesity_measure_",i)),Çã¸®µÑ·¹ÃøÁ¤ == 1 & ¼ºº° == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), Çã¸®µÑ·¹ÃøÁ¤ == 1)))
+print(nrow(filter(get(paste0("obesity_measure_",i)),Çã¸®µÑ·¹ÃøÁ¤ == 0 & ¼ºº° == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), Çã¸®µÑ·¹ÃøÁ¤ == 0)))
 
 assign(paste0("missing_values_distribution_",i),ggarrange(get(paste0("fat_distribution_",i)),get(paste0("BMI_distribution_",i)),get(paste0("age_distribution_",i)), ncol = 1, nrow = 3))
 assign(paste0("missing_values_exploration_",i),get(paste0("missing_values_distribution_", i))%>%
-  annotate_figure(top = text_grob("í—ˆë¦¬ë‘˜ë ˆ ê²°ì¸¡ ì—¬ë¶€ì— ë”°ë¥¸ ë¶„í¬", face = "bold", size = 14), bottom = text_grob(paste0("Data Source: \n KSPO Physical Examination Results (",i,")"), color = "blue", hjust = 1, x = 1, face = "italic", size = 10)))
+  annotate_figure(top = text_grob("Çã¸®µÑ·¹ °áÃø ¿©ºÎ¿¡ µû¸¥ ºĞÆ÷", face = "bold", size = 14), bottom = text_grob(paste0("Data Source: \n KSPO Physical Examination Results (",i,")"), color = "blue", hjust = 1, x = 1, face = "italic", size = 10)))
 }
 
 missing_values_exploration_201901
@@ -124,28 +125,28 @@ missing_values_exploration_201912
 #Repeat the process until you reach the point
 #where the R^2 is maximum.
 for (i in c(201901:201912)){
-assign(paste0("fill_in_missing_values_",i,"_1"),lm(í—ˆë¦¬ë‘˜ë ˆ ~ ë‚˜ì´+factor(ì„±ë³„)+BMI+ì²´ì§€ë°©ìœ¨,get(paste0("obesity_measure_",i))))
+assign(paste0("fill_in_missing_values_",i,"_1"),lm(Çã¸®µÑ·¹ ~ ³ªÀÌ+factor(¼ºº°)+BMI+Ã¼Áö¹æÀ²,get(paste0("obesity_measure_",i))))
 print(summary(get(paste0("fill_in_missing_values_",i,"_1"))))
-assign(paste0("fill_in_missing_values_",i,"_2"),lm(í—ˆë¦¬ë‘˜ë ˆ ~ factor(ì„±ë³„)+BMI+ì²´ì§€ë°©ìœ¨,get(paste0("obesity_measure_",i))))
+assign(paste0("fill_in_missing_values_",i,"_2"),lm(Çã¸®µÑ·¹ ~ factor(¼ºº°)+BMI+Ã¼Áö¹æÀ²,get(paste0("obesity_measure_",i))))
 print(summary(get(paste0("fill_in_missing_values_",i,"_2"))))
-assign(paste0("fill_in_missing_values_",i,"_3"),lm(í—ˆë¦¬ë‘˜ë ˆ ~ BMI+ì²´ì§€ë°©ìœ¨,get(paste0("obesity_measure_",i))))
+assign(paste0("fill_in_missing_values_",i,"_3"),lm(Çã¸®µÑ·¹ ~ BMI+Ã¼Áö¹æÀ²,get(paste0("obesity_measure_",i))))
 print(summary(get(paste0("fill_in_missing_values_",i,"_3"))))
 }
 
 #Fill in missing values with imputed values determined by the linear regressions above.
 #Compare the distribution of missing values and fully observed values for each variable of interest
-obesity_measure_201901[is.na(obesity_measure_201901$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201901_2,obesity_measure_201901[is.na(obesity_measure_201901$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201902[is.na(obesity_measure_201902$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201902_1,obesity_measure_201902[is.na(obesity_measure_201902$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201903[is.na(obesity_measure_201903$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201903_1,obesity_measure_201903[is.na(obesity_measure_201903$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201904[is.na(obesity_measure_201904$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201904_1,obesity_measure_201904[is.na(obesity_measure_201904$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201905[is.na(obesity_measure_201905$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201905_1,obesity_measure_201905[is.na(obesity_measure_201905$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201906[is.na(obesity_measure_201906$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201906_1,obesity_measure_201906[is.na(obesity_measure_201906$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201907[is.na(obesity_measure_201907$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201907_1,obesity_measure_201907[is.na(obesity_measure_201907$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201908[is.na(obesity_measure_201908$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201908_1,obesity_measure_201908[is.na(obesity_measure_201908$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201909[is.na(obesity_measure_201909$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201909_1,obesity_measure_201909[is.na(obesity_measure_201909$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201910[is.na(obesity_measure_201910$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201910_1,obesity_measure_201910[is.na(obesity_measure_201910$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201911[is.na(obesity_measure_201911$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201911_1,obesity_measure_201911[is.na(obesity_measure_201911$í—ˆë¦¬ë‘˜ë ˆ),])
-obesity_measure_201912[is.na(obesity_measure_201912$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(fill_in_missing_values_201912_2,obesity_measure_201912[is.na(obesity_measure_201912$í—ˆë¦¬ë‘˜ë ˆ),])
+obesity_measure_201901[is.na(obesity_measure_201901$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201901_2,obesity_measure_201901[is.na(obesity_measure_201901$Çã¸®µÑ·¹),])
+obesity_measure_201902[is.na(obesity_measure_201902$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201902_1,obesity_measure_201902[is.na(obesity_measure_201902$Çã¸®µÑ·¹),])
+obesity_measure_201903[is.na(obesity_measure_201903$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201903_1,obesity_measure_201903[is.na(obesity_measure_201903$Çã¸®µÑ·¹),])
+obesity_measure_201904[is.na(obesity_measure_201904$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201904_1,obesity_measure_201904[is.na(obesity_measure_201904$Çã¸®µÑ·¹),])
+obesity_measure_201905[is.na(obesity_measure_201905$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201905_1,obesity_measure_201905[is.na(obesity_measure_201905$Çã¸®µÑ·¹),])
+obesity_measure_201906[is.na(obesity_measure_201906$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201906_1,obesity_measure_201906[is.na(obesity_measure_201906$Çã¸®µÑ·¹),])
+obesity_measure_201907[is.na(obesity_measure_201907$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201907_1,obesity_measure_201907[is.na(obesity_measure_201907$Çã¸®µÑ·¹),])
+obesity_measure_201908[is.na(obesity_measure_201908$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201908_1,obesity_measure_201908[is.na(obesity_measure_201908$Çã¸®µÑ·¹),])
+obesity_measure_201909[is.na(obesity_measure_201909$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201909_1,obesity_measure_201909[is.na(obesity_measure_201909$Çã¸®µÑ·¹),])
+obesity_measure_201910[is.na(obesity_measure_201910$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201910_1,obesity_measure_201910[is.na(obesity_measure_201910$Çã¸®µÑ·¹),])
+obesity_measure_201911[is.na(obesity_measure_201911$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201911_1,obesity_measure_201911[is.na(obesity_measure_201911$Çã¸®µÑ·¹),])
+obesity_measure_201912[is.na(obesity_measure_201912$Çã¸®µÑ·¹),8] <- predict(fill_in_missing_values_201912_2,obesity_measure_201912[is.na(obesity_measure_201912$Çã¸®µÑ·¹),])
 
 #Compare the distribution of the imputed values with that of the fully observed values: the two distributions must be similar,
 #since we assumed MAR: the propensity for a data point to be missing is not related to the missing data.
@@ -155,10 +156,10 @@ obesity_measure_201912[is.na(obesity_measure_201912$í—ˆë¦¬ë‘˜ë ˆ),8] <- predict(
 #(missing_values_exploration_2019[month]) would help. Underneath, I have also generated the plot for comparing the distribution of gender among
 #non-WC missing individuals to that among WC-missing individuals in each month.
 for (i in c(201901:201912)){
-assign(paste0("aft_imp_comp_",i), ggplot(get(paste0("obesity_measure_",i)),aes(í—ˆë¦¬ë‘˜ë ˆ,fill = í—ˆë¦¬ë‘˜ë ˆì¸¡ì •)) + geom_density(alpha = 0.5) + scale_x_continuous("í—ˆë¦¬ë‘˜ë ˆ(cm)") + ggtitle("í—ˆë¦¬ë‘˜ë ˆì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5)))
+assign(paste0("aft_imp_comp_",i), ggplot(get(paste0("obesity_measure_",i)),aes(Çã¸®µÑ·¹,fill = Çã¸®µÑ·¹ÃøÁ¤)) + geom_density(alpha = 0.5) + scale_x_continuous("Çã¸®µÑ·¹(cm)") + ggtitle("Çã¸®µÑ·¹ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5)))
 assign(paste0("aft_imp_ins_",i), get(paste0("aft_imp_comp_",i)) %>%
-  annotate_figure(top = text_grob(paste0("ë¶„í¬: ëŒ€ì²´ê°’ vs. ê´€ì°°ê°’ ","(",i,")"), face = "bold", size = 14), bottom = text_grob("Caveat: Under MAR (Missing at Random) model, the density should be the same between the observed values and the imputed values", color = "blue", hjust = 1, x = 1, face = "italic", size = 10)))
-assign(paste0("gender_distribution_",i), ggplot(get(paste0("obesity_measure_",i)),aes(í—ˆë¦¬ë‘˜ë ˆì¸¡ì •,fill = ì„±ë³„)) + geom_bar(stat = "count") + ggtitle("ì„±ë³„ì˜ ë¶„í¬") + theme(plot.title = element_text(hjust = 0.5)))
+  annotate_figure(top = text_grob(paste0("ºĞÆ÷: ´ëÃ¼°ª vs. °üÂû°ª ","(",i,")"), face = "bold", size = 14), bottom = text_grob("Caveat: Under MAR (Missing at Random) model, the density should be the same between the observed values and the imputed values", color = "blue", hjust = 1, x = 1, face = "italic", size = 10)))
+assign(paste0("gender_distribution_",i), ggplot(get(paste0("obesity_measure_",i)),aes(Çã¸®µÑ·¹ÃøÁ¤,fill = ¼ºº°)) + geom_bar(position = "fill") + ggtitle("¼ºº°ÀÇ ºĞÆ÷") + theme(plot.title = element_text(hjust = 0.5)))
 }
 
 aft_imp_ins_201901
@@ -197,8 +198,8 @@ gender_distribution_201912
 # cardiovascular diseases: WHtR
 for(i in c(201901:201912)){
 assign(paste0("obesity_measure_WHtR_",i), get(paste0("obesity_measure_",i)) %>%
-  mutate(WHtR = í—ˆë¦¬ë‘˜ë ˆ/í‚¤))
-#write_xlsx(get(paste0("obesity_measure_WHtR_",i)), paste0("obesity_measure_WHtR_",i,".xlsx"))
+  mutate(WHtR = Çã¸®µÑ·¹/Å°))
+write_xlsx(get(paste0("obesity_measure_WHtR_",i)), paste0("obesity_measure_WHtR_",i,".xlsx"))
 }
 #---------------------------------------------------------
 #Combine monthly health statistics data into a single annual data
@@ -206,10 +207,10 @@ obesity_measure_WHtR_2019 <- rbind(obesity_measure_WHtR_201901,obesity_measure_W
                                    obesity_measure_WHtR_201904,obesity_measure_WHtR_201905,obesity_measure_WHtR_201906,
                                    obesity_measure_WHtR_201907,obesity_measure_WHtR_201908,obesity_measure_WHtR_201909,
                                    obesity_measure_WHtR_201910,obesity_measure_WHtR_201911,obesity_measure_WHtR_201912) %>%
-  filter(ì²´ì§€ë°©ìœ¨ > 21 | WHtR < 1) %>%
-  filter(ì²´ì§€ë°©ìœ¨ > 4.6 | WHtR < 0.657) %>%
-  filter(ì²´ì§€ë°©ìœ¨ < 81.7 | WHtR > 0.41)
-obesity_measure_WHtR_2019$ì›” <- factor(obesity_measure_WHtR_2019$ì›”)
+  filter(Ã¼Áö¹æÀ² > 21 | WHtR < 1) %>%
+  filter(Ã¼Áö¹æÀ² > 4.6 | WHtR < 0.657) %>%
+  filter(Ã¼Áö¹æÀ² < 81.7 | WHtR > 0.41)
+obesity_measure_WHtR_2019$¿ù <- factor(obesity_measure_WHtR_2019$¿ù)
 #write_xlsx(obesity_measure_WHtR_2019,"obesity_measure_WHtR_2019.xlsx")
 
 #Preliminary statistics of the annual data before applying 
@@ -218,86 +219,86 @@ obesity_measure_WHtR_2019$ì›” <- factor(obesity_measure_WHtR_2019$ì›”)
 #extension, you can convert them into .md files and then into .html files via
 #https://markdowntohtml.com/ .html files look much cleaner and can be
 #screen-captured for later use in PPT slides or thesis.
-summary_stat_by_age <- tableby(ì—°ë ¹ëŒ€~BMI+WHtR+í—ˆë¦¬ë‘˜ë ˆ+ì²´ì§€ë°©ìœ¨,data = obesity_measure_WHtR_2019,
+summary_stat_by_age <- tableby(¿¬·É´ë~BMI+WHtR+Çã¸®µÑ·¹+Ã¼Áö¹æÀ²,data = obesity_measure_WHtR_2019,
                                   test = T, numeric.test = "anova")
-summary_stat_by_gender <- tableby(ì„±ë³„~BMI+WHtR+í—ˆë¦¬ë‘˜ë ˆ+ì²´ì§€ë°©ìœ¨,data = obesity_measure_WHtR_2019,
+summary_stat_by_gender <- tableby(¼ºº°~BMI+WHtR+Çã¸®µÑ·¹+Ã¼Áö¹æÀ²,data = obesity_measure_WHtR_2019,
                                   test = T, numeric.test = "anova")
 
 #sink(file = "summary_stat_by_age.txt")
-summary(summary_stat_by_age, title = "ì—°ë ¹ëŒ€ë³„ ë¹„ë§Œì§€í‘œ í†µê³„ (ANOVA ê²€ì • ê²°ê³¼ í¬í•¨)", text = T)
-#sink(file = NULL)
+summary(summary_stat_by_age, title = "¿¬·É´ëº° ºñ¸¸ÁöÇ¥ Åë°è (ANOVA °ËÁ¤ °á°ú Æ÷ÇÔ)", text = T)
+#sink(file=NULL)
 
 #sink(file = "summary_stat_by_gender.txt")
-summary(summary_stat_by_gender, title = "ì„±ë³„ ë¹„ë§Œì§€í‘œ í†µê³„ (t ê²€ì • ê²°ê³¼ í¬í•¨)", text = T)
-#sink(file = NULL)
+summary(summary_stat_by_gender, title = "¼ºº° ºñ¸¸ÁöÇ¥ Åë°è (t °ËÁ¤ °á°ú Æ÷ÇÔ)", text = T)
+#sink(file=NULL)
 
-#Before applying the LSDV(here, the dummy variable is for each month)
+#Before applying the LSDV (here, the dummy variable is for each month)
 #model under the pooled cross-sectional data assumption, take a preliminary
 #view on the distribution across months. See if there does exist differences
 #in the distributions of various health and sensus stats across months.
-fat_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(ì²´ì§€ë°©ìœ¨,fill = ì›”))+geom_density(alpha = 0.3)+scale_x_continuous("ì²´ì§€ë°©ìœ¨(%)")+ggtitle("ì›”ë³„ ì²´ì§€ë°©ìœ¨ì˜ ë¶„í¬")+theme(plot.title = element_text(hjust = 0.5))
-age_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(ë‚˜ì´,fill = ì›”))+geom_density(alpha = 0.3)+scale_x_continuous("ë‚˜ì´")+ggtitle("ì›”ë³„ ë‚˜ì´ì˜ ë¶„í¬")+theme(plot.title = element_text(hjust = 0.5))
-gender_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(ì›”,fill = ì„±ë³„))+geom_bar(stat = "count", alpha = 0.3)+scale_x_discrete("ì›”")+ggtitle("ì›”ë³„ ì„±ë³„ì˜ ë¶„í¬")+theme(plot.title = element_text(hjust = 0.5))
-BMI_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(BMI,fill = ì›”))+geom_density(alpha = 0.3)+scale_x_continuous("BMI(ëª¸ë¬´ê²Œ(kg)/í‚¤(m)^2)")+ggtitle("ì›”ë³„ BMIì˜ ë¶„í¬")+theme(plot.title = element_text(hjust = 0.5))
-WHtR_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(WHtR,fill = ì›”))+geom_density(alpha = 0.3)+scale_x_continuous("WHtR(í—ˆë¦¬ë‘˜ë ˆ(cm)/í‚¤(cm))")+ggtitle("ì›”ë³„ WHtRì˜ ë¶„í¬")+theme(plot.title = element_text(hjust = 0.5))
-waist_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(í—ˆë¦¬ë‘˜ë ˆ,fill = ì›”))+geom_density(alpha = 0.3)+scale_x_continuous("í—ˆë¦¬ë‘˜ë ˆ(cm)")+ggtitle("ì›”ë³„ í—ˆë¦¬ë‘˜ë ˆì˜ ë¶„í¬")+theme(plot.title = element_text(hjust = 0.5))
+fat_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(Ã¼Áö¹æÀ²,fill = ¿ù))+geom_density(alpha = 0.3)+scale_x_continuous("Ã¼Áö¹æÀ²(%)")+ggtitle("¿ùº° Ã¼Áö¹æÀ²ÀÇ ºĞÆ÷")+theme(plot.title = element_text(hjust = 0.5))
+age_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(³ªÀÌ,fill = ¿ù))+geom_density(alpha = 0.3)+scale_x_continuous("³ªÀÌ")+ggtitle("¿ùº° ³ªÀÌÀÇ ºĞÆ÷")+theme(plot.title = element_text(hjust = 0.5))
+gender_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(¿ù,fill = ¼ºº°))+geom_bar(stat = "count", alpha = 0.3)+scale_x_discrete("¿ù")+ggtitle("¿ùº° ¼ºº°ÀÇ ºĞÆ÷")+theme(plot.title = element_text(hjust = 0.5))
+BMI_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(BMI,fill = ¿ù))+geom_density(alpha = 0.3)+scale_x_continuous("BMI(¸ö¹«°Ô(kg)/Å°(m)^2)")+ggtitle("¿ùº° BMIÀÇ ºĞÆ÷")+theme(plot.title = element_text(hjust = 0.5))
+WHtR_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(WHtR,fill = ¿ù))+geom_density(alpha = 0.3)+scale_x_continuous("WHtR(Çã¸®µÑ·¹(cm)/Å°(cm))")+ggtitle("¿ùº° WHtRÀÇ ºĞÆ÷")+theme(plot.title = element_text(hjust = 0.5))
+waist_dist_across_month <- ggplot(obesity_measure_WHtR_2019,aes(Çã¸®µÑ·¹,fill = ¿ù))+geom_density(alpha = 0.3)+scale_x_continuous("Çã¸®µÑ·¹(cm)")+ggtitle("¿ùº° Çã¸®µÑ·¹ÀÇ ºĞÆ÷")+theme(plot.title = element_text(hjust = 0.5))
 dist_across_month <- ggarrange(fat_dist_across_month,age_dist_across_month,gender_dist_across_month,BMI_dist_across_month,WHtR_dist_across_month,waist_dist_across_month,nrow=2,ncol=3) %>%
-  annotate_figure(top = text_grob("ì›”ë³„ ì£¼ìš” ë³€ìˆ˜ì˜ ë¶„í¬ (2019)", face = "bold", size = 14))
+  annotate_figure(top = text_grob("¿ùº° ÁÖ¿ä º¯¼öÀÇ ºĞÆ÷ (2019)", face = "bold", size = 14))
 
 # Also, look at how all the variables in the annual data are correlated to each other in a single picture(except for gender, since it is a categorical variable):
 # Notice that WHtR's correlation to BFP is the highest among all the variables
-correlation_matrix_with_WHtR <- ggpairs(obesity_measure_WHtR_2019,columns = c("ë‚˜ì´","BMI","í—ˆë¦¬ë‘˜ë ˆ","WHtR","ì²´ì§€ë°©ìœ¨")) + ggtitle("ì£¼ìš” ë³€ìˆ˜ ê°„ ìƒê´€ê´€ê³„")
+correlation_matrix_with_WHtR <- ggpairs(obesity_measure_WHtR_2019,columns = c("³ªÀÌ","BMI","Çã¸®µÑ·¹","WHtR","Ã¼Áö¹æÀ²")) + ggtitle("ÁÖ¿ä º¯¼ö °£ »ó°ü°ü°è")
 correlation_matrix_with_WHtR
 
 #Here comes the showtime. Apply the LSDV model to predict
-#the BFP(body fat percentage). The code below will carry out
+#the BFP. The code below will carry out
 #the backward stepwise regression while plugging in different
 #obesity variables(BMI,WHtR,WC) to find out which model best predicts
 #the BFP.
 
-#regress_on_BMI_1 <- lm(ì²´ì§€ë°©ìœ¨ ~ BMI + ë‚˜ì´ + ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_BMI_1 <- lm(Ã¼Áö¹æÀ² ~ BMI + ³ªÀÌ + ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_BMI_1)
 
-#regress_on_BMI_2 <- lm(ì²´ì§€ë°©ìœ¨ ~ BMI + ë‚˜ì´ + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_BMI_2 <- lm(Ã¼Áö¹æÀ² ~ BMI + ³ªÀÌ + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_BMI_2)
 
-regress_on_BMI_3 <- lm(ì²´ì§€ë°©ìœ¨ ~ BMI + ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+regress_on_BMI_3 <- lm(Ã¼Áö¹æÀ² ~ BMI + ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 summary(regress_on_BMI_3)
 
-#regress_on_BMI_4 <- lm(ì²´ì§€ë°©ìœ¨ ~ BMI + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_BMI_4 <- lm(Ã¼Áö¹æÀ² ~ BMI + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_BMI_4)
 
-#regress_on_WC_1 <- lm(ì²´ì§€ë°©ìœ¨ ~ í—ˆë¦¬ë‘˜ë ˆ + ë‚˜ì´ + ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WC_1 <- lm(Ã¼Áö¹æÀ² ~ Çã¸®µÑ·¹ + ³ªÀÌ + ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WC_1)
 
-#regress_on_WC_2 <- lm(ì²´ì§€ë°©ìœ¨ ~ í—ˆë¦¬ë‘˜ë ˆ + ë‚˜ì´ + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WC_2 <- lm(Ã¼Áö¹æÀ² ~ Çã¸®µÑ·¹ + ³ªÀÌ + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WC_2)
 
-regress_on_WC_3 <- lm(ì²´ì§€ë°©ìœ¨ ~ í—ˆë¦¬ë‘˜ë ˆ + ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+regress_on_WC_3 <- lm(Ã¼Áö¹æÀ² ~ Çã¸®µÑ·¹ + ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 summary(regress_on_WC_3)
 
-#regress_on_WC_4 <- lm(ì²´ì§€ë°©ìœ¨ ~ í—ˆë¦¬ë‘˜ë ˆ + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WC_4 <- lm(Ã¼Áö¹æÀ² ~ Çã¸®µÑ·¹ + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WC_4)
 
 #Eliminate outliers with high leverages and Cook's Distances under regress_on_WHtR_1
 #(ex:one observation had BFP of 20.8% and WHtR of 1.18. How can someone who is almost
-#underweight have a waist wider than one's own height?) and repeat the above and below
-#regressions again. Combination of common sense, broom::augment() function on regress_on_WHtR_1
+#underweight have a waist wider than one's own height?) and repeat the below regressions
+#again. Combination of common sense, broom::augment() function on regress_on_WHtR_1
 #(focus on .hat and .cooksd), and correlation_matrix_with_WHtR previously obtained
 #would help decide which outliers to throw away.
 
-#regress_on_WHtR_1 <- lm(ì²´ì§€ë°©ìœ¨ ~ WHtR + ë‚˜ì´ + ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WHtR_1 <- lm(Ã¼Áö¹æÀ² ~ WHtR + ³ªÀÌ + ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_1)
 #arrange(augment(regress_on_WHtR_1),desc(.hat))
 #arrange(augment(regress_on_WHtR_1),desc(.cooksd))
 
-#regress_on_WHtR_2 <- lm(ì²´ì§€ë°©ìœ¨ ~ WHtR + ë‚˜ì´ + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WHtR_2 <- lm(Ã¼Áö¹æÀ² ~ WHtR + ³ªÀÌ + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_2)
 
-regress_on_WHtR_3 <- lm(ì²´ì§€ë°©ìœ¨ ~ WHtR + ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+regress_on_WHtR_3 <- lm(Ã¼Áö¹æÀ² ~ WHtR + ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 summary(regress_on_WHtR_3)
 
-#regress_on_WHtR_4 <- lm(ì²´ì§€ë°©ìœ¨ ~ WHtR + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WHtR_4 <- lm(Ã¼Áö¹æÀ² ~ WHtR + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_4)
 
 #There is almost a minimal difference in the adjusted R^2
@@ -317,11 +318,11 @@ summary(regress_on_WHtR_3)
 #based on the leverage(problem of the independent variable) and Cook's Distance.
 plot(regress_on_WHtR_3)
 
-#regress_on_WHtR_5 <- lm(ì²´ì§€ë°©ìœ¨ ~ WHtR + ifelse(ì„±ë³„ == "M",1,0) + ì›” + WHtR*ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WHtR_5 <- lm(Ã¼Áö¹æÀ² ~ WHtR + ifelse(¼ºº° == "M",1,0) + ¿ù + WHtR*¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_5)
-regress_on_WHtR_6 <- lm(ì²´ì§€ë°©ìœ¨ ~ WHtR + WHtR*ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+regress_on_WHtR_6 <- lm(Ã¼Áö¹æÀ² ~ WHtR + WHtR*ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 summary(regress_on_WHtR_6)
-#regress_on_WHtR_7 <- lm(ì²´ì§€ë°©ìœ¨ ~ WHtR + WHtR*ifelse(ì„±ë³„ == "M",1,0) + ì›” -1, obesity_measure_WHtR_2019)
+#regress_on_WHtR_7 <- lm(Ã¼Áö¹æÀ² ~ WHtR + WHtR*ifelse(¼ºº° == "M",1,0) + ¿ù -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_7)
 
 plot(regress_on_WHtR_6)
@@ -345,12 +346,12 @@ plot(regress_on_WHtR_6)
 #stargazer(regress_on_BMI_3,regress_on_WC_3,regress_on_WHtR_3,regress_on_WHtR_6,
 #          type = "html",
 #          out = "LSDV_comparison.html",
-#          title = "íšŒê·€ë¶„ì„ ë¹„êµ",
+#          title = "È¸±ÍºĞ¼® ºñ±³",
 #          ci = F, digits= 3,
-#          covariate.labels = c("BMI(kg/m<sup>2</sup>)","í—ˆë¦¬ë‘˜ë ˆ(cm)","WHtR(cm/cm)",
-#                               "ì„±ë³„","1ì›”","2ì›”","3ì›”","4ì›”","5ì›”","6ì›”",
-#                               "7ì›”","8ì›”","9ì›”","10ì›”","11ì›”","12ì›”","WHtR*ì„±ë³„"),
-#          notes = "BMI - ëª¸ë¬´ê²Œ/í‚¤<sup>2</sup>, WHtR - í—ˆë¦¬ë‘˜ë ˆ/í‚¤",
+#          covariate.labels = c("BMI(kg/m<sup>2</sup>)","Çã¸®µÑ·¹(cm)","WHtR(cm/cm)",
+#                               "¼ºº°","1¿ù","2¿ù","3¿ù","4¿ù","5¿ù","6¿ù",
+#                               "7¿ù","8¿ù","9¿ù","10¿ù","11¿ù","12¿ù","WHtR*¼ºº°"),
+#          notes = "BMI - ¸ö¹«°Ô/Å°<sup>2</sup>, WHtR - Çã¸®µÑ·¹/Å°",
 #          model.names = T, single.row = T)
 # --------------------------------------------------------
 # Create an R Shiny Dashboard displaying the distribution
