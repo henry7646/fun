@@ -4,7 +4,7 @@
 server <- function(input,output){
   observeEvent(input$help,{
     showModal(modalDialog(
-      helpText("ÀÌ ´ë½¬º¸µå´Â ±¹¹ÎÃ¼À°ÁøÈï°ø´ÜÀÇ 2019³â ±¹¹ÎÃ¼·ÂÃøÁ¤µ¥ÀÌÅÍ¸¦ ±â¹İÀ¸·Î Á¦ÀÛÇÏ¿´½À´Ï´Ù.")
+      helpText("ì´ ëŒ€ì‹œë³´ë“œëŠ” êµ­ë¯¼ì²´ìœ¡ì§„í¥ê³µë‹¨ì˜ 2019ë…„ êµ­ë¯¼ì²´ë ¥ì¸¡ì •ë°ì´í„°ë¥¼ ê¸°ë°˜ìœ¼ë¡œ ì œì‘í•˜ì˜€ìŠµë‹ˆë‹¤.")
     ))
   })
   
@@ -14,8 +14,8 @@ server <- function(input,output){
   
   rval_whtr_rank_cohort <- reactive({
     ecdf(filter(obesity_measure_WHtR_2019,
-                ¼ºº° == input$gender,
-                ¿¬·É´ë == input$age_cohort)$WHtR)(rval_whtr())
+                ì„±ë³„ == input$gender,
+                ì—°ë ¹ëŒ€ == input$age_cohort)$WHtR)(rval_whtr())
   })
   
   rval_whtr_rank <- reactive({
@@ -28,8 +28,8 @@ server <- function(input,output){
   
   rval_bmi_rank_cohort <- reactive({
         ecdf(filter(obesity_measure_WHtR_2019,
-                ¼ºº° == input$gender,
-                ¿¬·É´ë == input$age_cohort)$BMI)(rval_bmi())
+                ì„±ë³„ == input$gender,
+                ì—°ë ¹ëŒ€ == input$age_cohort)$BMI)(rval_bmi())
   })
   
   rval_bmi_rank <- reactive({
@@ -45,68 +45,68 @@ server <- function(input,output){
   
   rval_bfp_rank_cohort <- reactive({
     ecdf(filter(obesity_measure_WHtR_2019,
-                ¼ºº° == input$gender,
-                ¿¬·É´ë == input$age_cohort)$Ã¼Áö¹æÀ²)(rval_bfp())
+                ì„±ë³„ == input$gender,
+                ì—°ë ¹ëŒ€ == input$age_cohort)$ì²´ì§€ë°©ìœ¨)(rval_bfp())
   })
   
   rval_bfp_rank <- reactive({
-    ecdf(obesity_measure_WHtR_2019$Ã¼Áö¹æÀ²)(rval_bfp())
+    ecdf(obesity_measure_WHtR_2019$ì²´ì§€ë°©ìœ¨)(rval_bfp())
   })
   
   output$whtr <- renderText({
-    paste0("Çã¸® ½ÅÀå ºñÀ²(WHtR): ",round(rval_whtr(),2),
-          " / ", input$age_cohort, ", ", input$gender, " Áß ¹éºĞÀ§: ",
+    paste0("í—ˆë¦¬ ì‹ ì¥ ë¹„ìœ¨(WHtR): ",round(rval_whtr(),2),
+          " / ", input$age_cohort, ", ", input$gender, " ì¤‘ ë°±ë¶„ìœ„: ",
           100*round(rval_whtr_rank_cohort(),2),"%",
-          " / ", "ÀüÃ¼ ÀÎ±¸ Áß ¹éºĞÀ§: ",
+          " / ", "ì „ì²´ ì¸êµ¬ ì¤‘ ë°±ë¶„ìœ„: ",
           100*round(rval_whtr_rank(),2),"%")
   })
   
   output$whtr_plot_cohort <- renderPlot({
     obesity_measure_WHtR_2019 %>%
-      filter(¼ºº° == input$gender, ¿¬·É´ë == input$age_cohort) %>%
-      ggplot(aes(WHtR))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_whtr(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("WHtR") + ggtitle(paste0("Çã¸® ½ÅÀå ºñÀ²ÀÇ ºĞÆ÷ (",input$age_cohort,", ",input$gender,")"))
+      filter(ì„±ë³„ == input$gender, ì—°ë ¹ëŒ€ == input$age_cohort) %>%
+      ggplot(aes(WHtR))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_whtr(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("WHtR") + ggtitle(paste0("í—ˆë¦¬ ì‹ ì¥ ë¹„ìœ¨ì˜ ë¶„í¬ (",input$age_cohort,", ",input$gender,")"))
   })
   
   output$whtr_plot <- renderPlot({
     obesity_measure_WHtR_2019 %>%
-      ggplot(aes(WHtR))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_whtr(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("WHtR") + ggtitle("Çã¸® ½ÅÀå ºñÀ²ÀÇ ºĞÆ÷ (ÀüÃ¼)")
+      ggplot(aes(WHtR))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_whtr(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("WHtR") + ggtitle("í—ˆë¦¬ ì‹ ì¥ ë¹„ìœ¨ì˜ ë¶„í¬ (ì „ì²´)")
   })
   
   output$bmi <- renderText({
-    paste0("Ã¼Áú·® Áö¼ö(BMI): ",round(rval_bmi(),1),
-           " / ", input$age_cohort, ", ", input$gender, " Áß ¹éºĞÀ§: ",
+    paste0("ì²´ì§ˆëŸ‰ ì§€ìˆ˜(BMI): ",round(rval_bmi(),1),
+           " / ", input$age_cohort, ", ", input$gender, " ì¤‘ ë°±ë¶„ìœ„: ",
            100*round(rval_bmi_rank_cohort(),2),"%",
-           " / ", "ÀüÃ¼ ÀÎ±¸ Áß ¹éºĞÀ§: ",
+           " / ", "ì „ì²´ ì¸êµ¬ ì¤‘ ë°±ë¶„ìœ„: ",
            100*round(rval_bmi_rank(),2),"%")
   })
   
   output$bmi_plot_cohort <- renderPlot({
     obesity_measure_WHtR_2019 %>%
-      filter(¼ºº° == input$gender, ¿¬·É´ë == input$age_cohort) %>%
-      ggplot(aes(BMI))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bmi(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("BMI") + ggtitle(paste0("Ã¼Áú·® Áö¼öÀÇ ºĞÆ÷ (",input$age_cohort,", ",input$gender,")"))
+      filter(ì„±ë³„ == input$gender, ì—°ë ¹ëŒ€ == input$age_cohort) %>%
+      ggplot(aes(BMI))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bmi(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("BMI") + ggtitle(paste0("ì²´ì§ˆëŸ‰ ì§€ìˆ˜ì˜ ë¶„í¬ (",input$age_cohort,", ",input$gender,")"))
   })
   
   output$bmi_plot <- renderPlot({
     obesity_measure_WHtR_2019 %>%
-      ggplot(aes(BMI))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bmi(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("BMI") + ggtitle("Ã¼Áú·® Áö¼öÀÇ ºĞÆ÷ (ÀüÃ¼)")
+      ggplot(aes(BMI))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bmi(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("BMI") + ggtitle("ì²´ì§ˆëŸ‰ ì§€ìˆ˜ì˜ ë¶„í¬ (ì „ì²´)")
   })
   
   output$bfp <- renderText({
-    paste0("Ã¼Áö¹æ·ü: ",round(rval_bfp(),1),
-           "%", " / ", input$age_cohort, ", ", input$gender, " Áß ¹éºĞÀ§: ",
+    paste0("ì²´ì§€ë°©ë¥ : ",round(rval_bfp(),1),
+           "%", " / ", input$age_cohort, ", ", input$gender, " ì¤‘ ë°±ë¶„ìœ„: ",
            100*round(rval_bfp_rank_cohort(),2),"%",
-           " / ", "ÀüÃ¼ ÀÎ±¸ Áß ¹éºĞÀ§: ",
+           " / ", "ì „ì²´ ì¸êµ¬ ì¤‘ ë°±ë¶„ìœ„: ",
            100*round(rval_bfp_rank(),2),"%")
   })
   
   output$bfp_plot_cohort <- renderPlot({
     obesity_measure_WHtR_2019 %>%
-      filter(¼ºº° == input$gender, ¿¬·É´ë == input$age_cohort) %>%
-      ggplot(aes(Ã¼Áö¹æÀ²))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bfp(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("Ã¼Áö¹æ·ü") + ggtitle(paste0("Ã¼Áö¹æ·üÀÇ ºĞÆ÷ (",input$age_cohort,", ",input$gender,")"))
+      filter(ì„±ë³„ == input$gender, ì—°ë ¹ëŒ€ == input$age_cohort) %>%
+      ggplot(aes(ì²´ì§€ë°©ìœ¨))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bfp(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("ì²´ì§€ë°©ë¥ ") + ggtitle(paste0("ì²´ì§€ë°©ë¥ ì˜ ë¶„í¬ (",input$age_cohort,", ",input$gender,")"))
   })
   
   output$bfp_plot <- renderPlot({
     obesity_measure_WHtR_2019 %>%
-      ggplot(aes(Ã¼Áö¹æÀ²))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bfp(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("Ã¼Áö¹æ·ü") + ggtitle("Ã¼Áö¹æ·üÀÇ ºĞÆ÷ (ÀüÃ¼)")
+      ggplot(aes(ì²´ì§€ë°©ìœ¨))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = rval_bfp(), color = "red", linetype = 2, size = 1.5) + scale_x_continuous("ì²´ì§€ë°©ë¥ ") + ggtitle("ì²´ì§€ë°©ë¥ ì˜ ë¶„í¬ (ì „ì²´)")
   })
 }
