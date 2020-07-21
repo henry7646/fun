@@ -8,6 +8,7 @@ library(readxl)
 library(writexl)
 library(data.table)
 library(tidyverse)
+library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(ggpubr)
@@ -15,6 +16,7 @@ library(GGally)
 library(lattice)
 library(mice)
 library(shiny)
+library(shinythemes)
 library(broom)
 library(stargazer)
 library(arsenal)
@@ -353,33 +355,3 @@ plot(regress_on_WHtR_6)
 #                               "7월","8월","9월","10월","11월","12월","WHtR*성별"),
 #          notes = "BMI - 몸무게/키<sup>2</sup>, WHtR - 허리둘레/키",
 #          model.names = T, single.row = T)
-# --------------------------------------------------------
-# Create an R Shiny Dashboard displaying the distribution
-# of the WHtR. If you type in your waist circumference and
-# height, you get your WHtR and your relative WHtR rank within
-# the whole probability distribution of WHtR.
-
-#ui <- fluidPage(
-#  titlePanel("How Fat am I?: Comparing My Waist-Height Ratio(WHtR) with Others'"),
-#  sidebarLayout(
-#    sidebarPanel(
-#      numericInput("waist","Waist cirumference(cm):",20,145,.1),
-#      numericInput("height","Height(cm):",130,200,.1),
-#      ),
-#    mainPanel(
-#      textOutput("q"),
-#      plotOutput("r")
-#      )
-#  )
-#)
-
-#server <- function(input,output){
-#  output$q <- renderText({
-#    paste("Your WHtR is",round(input$waist/input$height,2),".")
-#  })
-#  output$r <- renderPlot({
-#    ggplot(obesity_measure_with_WHtR,aes(WHtR))+geom_density(fill = "blue", alpha = 0.5) + geom_vline(xintercept = input$waist/input$height, color = "red") + scale_x_continuous("WHtR") + ggtitle("Distribution of WHtR")
-#  })
-#}
-
-#shinyApp(ui = ui,server = server)
