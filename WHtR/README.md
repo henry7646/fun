@@ -25,4 +25,4 @@ the **BFP obtained via BIA**, the one actually included in KSPO's data. Meanwhil
 project are:  
   * Filling in the missing values for BFP and WC  
   * Conducting exploratory data analysis of various health-related metrics (BFP, BMI, WC, WHtR) with numerous data visualizations
-  * Creating an R Shiny dashboard to enable people to know where they are in terms of various measures of obesity (BMI, WC, WHtR) and predict their BFP without visiting KSPO's centers or relying on biased, inconsistent formulas online.
+  * Creating an R Shiny App Dashboard to enable people to know where they are in terms of various measures of obesity (BMI, WHtR) and predict their BFP without visiting KSPO's centers or relying on biased, inconsistent formulas online.
