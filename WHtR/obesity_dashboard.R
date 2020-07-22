@@ -15,18 +15,18 @@
 # dummy variable(LSDV) model (regress_on_WHtR_6) from
 # exercise_measure.RData
 
-getwd()
-setwd("C:/R/WHtR")
+#getwd()
+#setwd("C:/R/WHtR")
 #rm(list=ls())
-load("exercise_measure.RData")
+#load("exercise_measure.RData")
 
-library(data.table)
-library(tidyverse)
-library(lubridate)
-library(dplyr)
-library(ggplot2)
-library(shiny)
-library(shinythemes)
+#library(data.table)
+#library(tidyverse)
+#library(lubridate)
+#library(dplyr)
+#library(ggplot2)
+#library(shiny)
+#library(shinythemes)
 
 source("ui.R")
 source("server.R")
