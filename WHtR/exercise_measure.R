@@ -1,5 +1,5 @@
 getwd()
-setwd("C:/R/WHtR")
+#setwd("C:/R/WHtR")
 #rm(list=ls())
 #load("exercise_measure.RData")
 
