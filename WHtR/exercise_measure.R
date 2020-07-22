@@ -1,7 +1,7 @@
 getwd()
 setwd("C:/R/WHtR")
 #rm(list=ls())
-load("exercise_measure.RData")
+#load("exercise_measure.RData")
 
 library(readr)
 library(readxl)
