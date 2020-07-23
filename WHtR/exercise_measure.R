@@ -68,13 +68,13 @@ for(i in c(201901:201912)){
 #Below is the for loop for checking outliers(in the sense of extreme values):
 #run this loop, check the outliers, and eliminate them by adding additional
 #conditions to the for loop above and running it again
-for(i in c(201901:201912)){
-  print(paste(i,min(select(get(paste0("obesity_measure_",i)),허리둘레), na.rm = T),max(select(get(paste0("obesity_measure_",i)),허리둘레), na.rm = T)))
-}
+#for(i in c(201901:201912)){
+#  print(paste(i,min(select(get(paste0("obesity_measure_",i)),허리둘레), na.rm = T),max(select(get(paste0("obesity_measure_",i)),허리둘레), na.rm = T)))
+#}
 # ---------------------------------------------------------
 #Explore the pattern of the missing data for each month:
 #md.pattern(obesity_measure_2019**)
-md.pattern(obesity_measure_201912)
+#md.pattern(obesity_measure_201912)
 
 #See if the distribution of each variable differ depending on whether the variable with missing values is missing a value or not:
 #Such is a sign of the data being MAR(Missing At Random) or MNAR(Missing Not At Random)
@@ -85,26 +85,26 @@ for(i in c(201901:201912)){
 assign(paste0("fat_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(체지방율,허리둘레측정,fill = 허리둘레측정)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("체지방율(%)") + ggtitle("체지방율의 분포") + theme(plot.title = element_text(hjust = 0.5)))
 assign(paste0("BMI_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(BMI,허리둘레측정,fill = 허리둘레측정)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("BMI(몸무게(kg)/키(m)^2)") + ggtitle("BMI의 분포") + theme(plot.title = element_text(hjust = 0.5)))
 assign(paste0("age_distribution_",i),ggplot(get(paste0("obesity_measure_",i)),aes(나이,허리둘레측정,fill = 허리둘레측정)) + geom_boxplot(alpha = 0.5) + scale_x_continuous("나이") + ggtitle("나이의 분포") + theme(plot.title = element_text(hjust = 0.5)))
-print(nrow(filter(get(paste0("obesity_measure_",i)),허리둘레측정 == 1 & 성별 == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), 허리둘레측정 == 1)))
-print(nrow(filter(get(paste0("obesity_measure_",i)),허리둘레측정 == 0 & 성별 == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), 허리둘레측정 == 0)))
+#print(nrow(filter(get(paste0("obesity_measure_",i)),허리둘레측정 == 1 & 성별 == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), 허리둘레측정 == 1)))
+#print(nrow(filter(get(paste0("obesity_measure_",i)),허리둘레측정 == 0 & 성별 == "M"))/nrow(filter(get(paste0("obesity_measure_",i)), 허리둘레측정 == 0)))
 
 assign(paste0("missing_values_distribution_",i),ggarrange(get(paste0("fat_distribution_",i)),get(paste0("BMI_distribution_",i)),get(paste0("age_distribution_",i)), ncol = 1, nrow = 3))
 assign(paste0("missing_values_exploration_",i),get(paste0("missing_values_distribution_", i))%>%
   annotate_figure(top = text_grob("허리둘레 결측 여부에 따른 분포", face = "bold", size = 14), bottom = text_grob(paste0("Data Source: \n KSPO Physical Examination Results (",i,")"), color = "blue", hjust = 1, x = 1, face = "italic", size = 10)))
 }
 
-missing_values_exploration_201901
-missing_values_exploration_201902
-missing_values_exploration_201903
-missing_values_exploration_201904
-missing_values_exploration_201905
-missing_values_exploration_201906
-missing_values_exploration_201907
-missing_values_exploration_201908
-missing_values_exploration_201909
-missing_values_exploration_201910
-missing_values_exploration_201911
-missing_values_exploration_201912
+#missing_values_exploration_201901
+#missing_values_exploration_201902
+#missing_values_exploration_201903
+#missing_values_exploration_201904
+#missing_values_exploration_201905
+#missing_values_exploration_201906
+#missing_values_exploration_201907
+#missing_values_exploration_201908
+#missing_values_exploration_201909
+#missing_values_exploration_201910
+#missing_values_exploration_201911
+#missing_values_exploration_201912
 
 #for(i in c(201901:201912)){
 #  ggsave(paste0("missing_values_exploration_",i,".png"),get(paste0("missing_values_exploration_",i)),units = "in",width = 12,height = 8,dpi = 300,limitsize = FALSE)
@@ -129,11 +129,11 @@ missing_values_exploration_201912
 #where the R^2 is maximum.
 for (i in c(201901:201912)){
 assign(paste0("fill_in_missing_values_",i,"_1"),lm(허리둘레 ~ 나이+factor(성별)+BMI+체지방율,get(paste0("obesity_measure_",i))))
-print(summary(get(paste0("fill_in_missing_values_",i,"_1"))))
+#print(summary(get(paste0("fill_in_missing_values_",i,"_1"))))
 assign(paste0("fill_in_missing_values_",i,"_2"),lm(허리둘레 ~ factor(성별)+BMI+체지방율,get(paste0("obesity_measure_",i))))
-print(summary(get(paste0("fill_in_missing_values_",i,"_2"))))
+#print(summary(get(paste0("fill_in_missing_values_",i,"_2"))))
 assign(paste0("fill_in_missing_values_",i,"_3"),lm(허리둘레 ~ BMI+체지방율,get(paste0("obesity_measure_",i))))
-print(summary(get(paste0("fill_in_missing_values_",i,"_3"))))
+#print(summary(get(paste0("fill_in_missing_values_",i,"_3"))))
 }
 
 #Fill in missing values with imputed values determined by the linear regressions above.
@@ -165,31 +165,31 @@ assign(paste0("aft_imp_ins_",i), get(paste0("aft_imp_comp_",i)) %>%
 assign(paste0("gender_distribution_",i), ggplot(get(paste0("obesity_measure_",i)),aes(허리둘레측정,fill = 성별)) + geom_bar(position = "fill") + ggtitle("성별의 분포") + theme(plot.title = element_text(hjust = 0.5)))
 }
 
-aft_imp_ins_201901
-aft_imp_ins_201902
-aft_imp_ins_201903
-aft_imp_ins_201904
-aft_imp_ins_201905
-aft_imp_ins_201906
-aft_imp_ins_201907
-aft_imp_ins_201908
-aft_imp_ins_201909
-aft_imp_ins_201910
-aft_imp_ins_201911
-aft_imp_ins_201912
+#aft_imp_ins_201901
+#aft_imp_ins_201902
+#aft_imp_ins_201903
+#aft_imp_ins_201904
+#aft_imp_ins_201905
+#aft_imp_ins_201906
+#aft_imp_ins_201907
+#aft_imp_ins_201908
+#aft_imp_ins_201909
+#aft_imp_ins_201910
+#aft_imp_ins_201911
+#aft_imp_ins_201912
 
-gender_distribution_201901
-gender_distribution_201902
-gender_distribution_201903
-gender_distribution_201904
-gender_distribution_201905
-gender_distribution_201906
-gender_distribution_201907
-gender_distribution_201908
-gender_distribution_201909
-gender_distribution_201910
-gender_distribution_201911
-gender_distribution_201912
+#gender_distribution_201901
+#gender_distribution_201902
+#gender_distribution_201903
+#gender_distribution_201904
+#gender_distribution_201905
+#gender_distribution_201906
+#gender_distribution_201907
+#gender_distribution_201908
+#gender_distribution_201909
+#gender_distribution_201910
+#gender_distribution_201911
+#gender_distribution_201912
 
 #for(i in c(201901:201912)){
 #  ggsave(paste0("aft_imp_ins_",i,".png"),get(paste0("aft_imp_ins_",i)),units = "in",width = 12,height = 8,dpi = 300,limitsize = FALSE)
@@ -202,7 +202,7 @@ gender_distribution_201912
 for(i in c(201901:201912)){
 assign(paste0("obesity_measure_WHtR_",i), get(paste0("obesity_measure_",i)) %>%
   mutate(WHtR = 허리둘레/키))
-write_xlsx(get(paste0("obesity_measure_WHtR_",i)), paste0("obesity_measure_WHtR_",i,".xlsx"))
+#write_xlsx(get(paste0("obesity_measure_WHtR_",i)), paste0("obesity_measure_WHtR_",i,".xlsx"))
 }
 #---------------------------------------------------------
 #Combine monthly health statistics data into a single annual data
@@ -251,7 +251,7 @@ dist_across_month <- ggarrange(fat_dist_across_month,age_dist_across_month,gende
 # Also, look at how all the variables in the annual data are correlated to each other in a single picture(except for gender, since it is a categorical variable):
 # Notice that WHtR's correlation to BFP is the highest among all the variables
 correlation_matrix_with_WHtR <- ggpairs(obesity_measure_WHtR_2019,columns = c("나이","BMI","허리둘레","WHtR","체지방율")) + ggtitle("주요 변수 간 상관관계")
-correlation_matrix_with_WHtR
+#correlation_matrix_with_WHtR
 
 #Here comes the showtime. Apply the LSDV model to predict
 #the BFP. The code below will carry out
@@ -266,7 +266,7 @@ correlation_matrix_with_WHtR
 #summary(regress_on_BMI_2)
 
 regress_on_BMI_3 <- lm(체지방율 ~ BMI + ifelse(성별 == "M",1,0) + 월 -1, obesity_measure_WHtR_2019)
-summary(regress_on_BMI_3)
+#summary(regress_on_BMI_3)
 
 #regress_on_BMI_4 <- lm(체지방율 ~ BMI + 월 -1, obesity_measure_WHtR_2019)
 #summary(regress_on_BMI_4)
@@ -278,7 +278,7 @@ summary(regress_on_BMI_3)
 #summary(regress_on_WC_2)
 
 regress_on_WC_3 <- lm(체지방율 ~ 허리둘레 + ifelse(성별 == "M",1,0) + 월 -1, obesity_measure_WHtR_2019)
-summary(regress_on_WC_3)
+#summary(regress_on_WC_3)
 
 #regress_on_WC_4 <- lm(체지방율 ~ 허리둘레 + 월 -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WC_4)
@@ -299,7 +299,7 @@ summary(regress_on_WC_3)
 #summary(regress_on_WHtR_2)
 
 regress_on_WHtR_3 <- lm(체지방율 ~ WHtR + ifelse(성별 == "M",1,0) + 월 -1, obesity_measure_WHtR_2019)
-summary(regress_on_WHtR_3)
+#summary(regress_on_WHtR_3)
 
 #regress_on_WHtR_4 <- lm(체지방율 ~ WHtR + 월 -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_4)
@@ -319,16 +319,16 @@ summary(regress_on_WHtR_3)
 #(2)standardized residuals must follow the standard normal distribution.
 #Also, check if there are any outliers distorting the slope coefficients
 #based on the leverage(problem of the independent variable) and Cook's Distance.
-plot(regress_on_WHtR_3)
+#plot(regress_on_WHtR_3)
 
 #regress_on_WHtR_5 <- lm(체지방율 ~ WHtR + ifelse(성별 == "M",1,0) + 월 + WHtR*월 -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_5)
 regress_on_WHtR_6 <- lm(체지방율 ~ WHtR + WHtR*ifelse(성별 == "M",1,0) + 월 -1, obesity_measure_WHtR_2019)
-summary(regress_on_WHtR_6)
+#summary(regress_on_WHtR_6)
 #regress_on_WHtR_7 <- lm(체지방율 ~ WHtR + WHtR*ifelse(성별 == "M",1,0) + 월 -1, obesity_measure_WHtR_2019)
 #summary(regress_on_WHtR_7)
 
-plot(regress_on_WHtR_6)
+#plot(regress_on_WHtR_6)
 
 #The scatterplot shows that there is a slight non-linear relationship between
 #residuals and fitted values of the regression of BFP on WHtR,gender,and month
