@@ -23,7 +23,7 @@ str(exercise$DATETIME)
 
 whr <- exercise %>%
   ggplot(aes(as.Date(DATETIME),WHR))+geom_line()+
-  scale_x_date("DATE",date_breaks = "1 day", date_labels = "%y/%m/%d")+
+  scale_x_date("DATE",date_breaks = "7 day", date_labels = "%y/%m/%d")+
   scale_y_continuous(limits=c(0.7,1),breaks=seq(0.7,1,0.1),expand=c(0,0))+
   geom_hline(yintercept = 0.80, color = "blue", linetype = 5)+
   annotate("text", x = ymd("2020/06/23"), y = 0.78, 
@@ -38,7 +38,7 @@ whr
 
 whtr <- exercise %>%
   ggplot(aes(as.Date(DATETIME),WHTR))+geom_line()+
-  scale_x_date("DATE",date_breaks = "1 day", date_labels = "%y/%m/%d")+
+  scale_x_date("DATE",date_breaks = "7 day", date_labels = "%y/%m/%d")+
   scale_y_continuous(limits=c(0.4,0.7),breaks=seq(0.4,0.7,0.1),
                      expand=c(0,0))+
   geom_hline(yintercept = 0.50, color = "blue", linetype = 5)+
