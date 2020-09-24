@@ -70,7 +70,7 @@ variable 조회결과 varchar2;
 variable 허리엉덩이비율 number;
 variable 허리신장비율 number;
 variable 체질량지수 number;
-EXECUTE whr_update(TO_DATE(SYSDATE,'YY/MM/DD'),90.4,98.3,77.0,:조회결과,:허리엉덩이비율,:허리신장비율,:체질량지수);
+EXECUTE whr_update(TO_DATE(SYSDATE,'YY/MM/DD'),89.6,98.5,77.4,:조회결과,:허리엉덩이비율,:허리신장비율,:체질량지수);
 PRINT 조회결과;
 PRINT 허리엉덩이비율;
 PRINT 허리신장비율;
